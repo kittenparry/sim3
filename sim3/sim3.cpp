@@ -1,20 +1,35 @@
-// sim3.cpp : This file contains the 'main' function. Program execution begins and ends there.
-//
-
 #include <iostream>
+#include <stdio.h>
+#include <time.h>
 
-int main()
-{
-    std::cout << "Hello World!\n";
+// interval of each refresh in time system below
+const int NUM_SECONDS = 1;
+
+int main() {
+    int count = 1;
+
+    double time_counter = 0;
+
+    clock_t this_time = clock();
+    clock_t last_time = this_time;
+
+    // printf("Gran = %ld\n", NUM_SECONDS * CLOCKS_PER_SEC);
+
+    while (true) {
+        this_time = clock();
+
+        time_counter += (double) (this_time - last_time);
+
+        last_time = this_time;
+
+        if (time_counter > (double) (NUM_SECONDS * CLOCKS_PER_SEC)) {
+            time_counter -= (double) (NUM_SECONDS * CLOCKS_PER_SEC);
+
+            // TODO: do human actions and stuff here?
+            printf("%d\n", count);
+            count++;
+        }
+
+        // printf("DebugTime = %f\n", time_counter);
+    }
 }
-
-// Run program: Ctrl + F5 or Debug > Start Without Debugging menu
-// Debug program: F5 or Debug > Start Debugging menu
-
-// Tips for Getting Started: 
-//   1. Use the Solution Explorer window to add/manage files
-//   2. Use the Team Explorer window to connect to source control
-//   3. Use the Output window to see build output and other messages
-//   4. Use the Error List window to view errors
-//   5. Go to Project > Add New Item to create new code files, or Project > Add Existing Item to add existing code files to the project
-//   6. In the future, to open this project again, go to File > Open > Project and select the .sln file
