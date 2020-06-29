@@ -11,7 +11,7 @@ const int NUM_SECONDS = 1;
 void drawMap(int w, int h, int map[]);
 
 int main() {
-    Human h1 = Human("Adam", 23);
+    Human* h1 = new Human("Adam", 23);
 
 
     // map stuff below
@@ -25,14 +25,16 @@ int main() {
         }
     }
 
+    mapContents[h1->getPositionY() * mapWidth + h1->getPositionX()] = 2;
+
     srand(time(NULL));
     int food = 15;
     while (food) {
         int rx = rand() % mapWidth;
         int ry = rand() % mapHeight;
 
-        if (mapContents[ry * mapWidth + rx] == 0) {
-            mapContents[ry * mapWidth + rx] = -1;
+        if (mapContents[ry * mapWidth + rx] == 0 && mapContents[ry * mapWidth + rx] != 2) {
+            mapContents[ry * mapWidth + rx] = 1;
             food--;
         }
     }
@@ -82,7 +84,10 @@ void drawMap(int w, int h, int map[]) {
             case 0:
                 tileChar = ' ';
                 break;
-            case -1: // food at the moment
+            case 1: // food at the moment
+                tileChar = '+';
+                break;
+            case 2:
                 tileChar = 'O';
                 break;
             default:
