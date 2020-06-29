@@ -34,7 +34,7 @@ int main() {
     drawMap(mapWidth, mapHeight, mapContents);
 
     
-    // timer stuff below
+    // timer system below
     /*
     int count = 1;
 
@@ -66,13 +66,10 @@ int main() {
 }
 
 void drawMap(int w, int h, int map[]) {
-    int tileVal;
     char tileChar;
     for (int y = 0; y < h; y++) {
         for (int x = 0; x < w; x++) {
-            tileVal = map[y * w + x];
-
-            switch (tileVal) {
+            switch (map[y * w + x]) {
             case 0:
                 tileChar = ' ';
                 break;
