@@ -11,14 +11,13 @@ const int NUM_SECONDS = 1;
 void drawMap(int w, int h, int map[]);
 
 int main() {
-    Human* h1 = new Human("Adam", 23);
+    Human h1 = Human("Adam", 23);
 
 
     // map stuff below
     int mapWidth = 10;
     int mapHeight = 12;
-    int* mapContents = nullptr;
-    mapContents = new int[mapWidth * mapHeight];
+    int* mapContents = new int[mapWidth * mapHeight];
 
     for (int y = 0; y < mapHeight; y++) {
         for (int x = 0; x < mapWidth; x++) {
@@ -39,6 +38,8 @@ int main() {
     }
 
     drawMap(mapWidth, mapHeight, mapContents);
+
+    delete[] mapContents;
 
     
     // timer system below
@@ -70,6 +71,7 @@ int main() {
         // printf("DebugTime = %f\n", time_counter);
     }
     */
+    return 0;
 }
 
 void drawMap(int w, int h, int map[]) {
