@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <time.h>
 #include <stdlib.h>
+#include <vector>
 
 #include "Human.h"
 #include "Map.h"
@@ -9,16 +10,16 @@
 // interval of each refresh in time system below
 const int NUM_SECONDS = 1;
 
-void drawMap(int w, int h, int map[]);
+void drawMap(int, int, int*, std::vector<int>);
 
 int main() {
     Human* h1 = new Human("Adam", 23);
-
 
     // map stuff below
     int mapWidth = map.width;
     int mapHeight = map.height;
     int* mapContents = new int[mapWidth * mapHeight];
+    std::vector<int> tilesFood;
 
     for (int y = 0; y < mapHeight; y++) {
         for (int x = 0; x < mapWidth; x++) {
@@ -29,19 +30,11 @@ int main() {
     srand(time(NULL));
     int food = 15;
     while (food) {
-        int rx = rand() % mapWidth;
-        int ry = rand() % mapHeight;
-
-        // TODO: don't place food here but instead create an array with food positions,
-        // then draw them according to positions in drawMap()
-        if (mapContents[ry * mapWidth + rx] == 0 && mapContents[ry * mapWidth + rx] != 2) {
-            mapContents[ry * mapWidth + rx] = 1;
-            food--;
-        }
+        tilesFood.push_back(rand() % (mapWidth * mapHeight));
+        food--;
     }
     
     // timer system below
-    // int count = 1;
     int oldX = 0;
     int oldY = 0;
 
@@ -49,8 +42,6 @@ int main() {
 
     clock_t this_time = clock();
     clock_t last_time = this_time;
-
-    // printf("Gran = %ld\n", NUM_SECONDS * CLOCKS_PER_SEC);
 
     while (true) {
         this_time = clock();
@@ -68,15 +59,10 @@ int main() {
             oldY = h1->getPositionY();
             mapContents[h1->getPositionY() * mapWidth + h1->getPositionX()] = 2;
 
-            drawMap(mapWidth, mapHeight, mapContents);
+            drawMap(mapWidth, mapHeight, mapContents, tilesFood);
             mapContents[oldY * mapWidth + oldX] = 0; // reset old position to nothing, though likely needs to have food and stuff intact
             h1->moveAround();
-
-            // printf("%d\n", count);
-            // count++;
         }
-
-        // printf("DebugTime = %f\n", time_counter);
     }
 
 
@@ -85,7 +71,13 @@ int main() {
     return 0;
 }
 
-void drawMap(int w, int h, int map[]) {
+void drawMap(int w, int h, int map[], std::vector<int> food) {
+
+    // assign food if it's not a human tile
+    for (int i = 0; i < food.size(); i++) {
+        if (map[food[i]] != 2) map[food[i]] = 1;
+    }
+
     char tileChar;
     for (int y = 0; y < h; y++) {
         for (int x = 0; x < w; x++) {
