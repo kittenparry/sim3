@@ -1,8 +1,10 @@
 #pragma once
 
 #include "RandomNumberGenerator.h"
+#include "Map.h"
 
 RandomNumberGenerator RNG;
+Map map;
 
 class Human {
 public:
@@ -20,8 +22,39 @@ public:
 	int getPositionX() { return positionX; }
 	int getPositionY() { return positionY; }
 	void setPosition(int x, int y) {
-		positionX = x;
-		positionY = y;
+		if (x < 0) {
+			positionX = 0;
+		} else if (x >= map.width) {
+			positionX = map.width - 1;
+		} else {
+			positionX = x;
+		}
+		if (y < 0) {
+			positionY = 0;
+		} else if (y >= map.height) {
+			positionY = map.height - 1;
+		} else {
+			positionY = y;
+		}
+	}
+
+	void moveAround() {
+		switch (RNG.BetweenTwoValues(1, 4)) {
+		case 1:
+			setPosition(positionX, positionY - 1);
+			break;
+		case 2:
+			setPosition(positionX -1, positionY);
+			break;
+		case 3:
+			setPosition(positionX, positionY + 1);
+			break;
+		case 4:
+			setPosition(positionX + 1, positionY);
+			break;
+		default:
+			break;
+		}
 	}
 
 private:

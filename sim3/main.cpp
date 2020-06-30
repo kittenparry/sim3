@@ -4,6 +4,7 @@
 #include <stdlib.h>
 
 #include "Human.h"
+#include "Map.h"
 
 // interval of each refresh in time system below
 const int NUM_SECONDS = 1;
@@ -15,8 +16,8 @@ int main() {
 
 
     // map stuff below
-    int mapWidth = 10;
-    int mapHeight = 12;
+    int mapWidth = map.width;
+    int mapHeight = map.height;
     int* mapContents = new int[mapWidth * mapHeight];
 
     for (int y = 0; y < mapHeight; y++) {
@@ -25,28 +26,24 @@ int main() {
         }
     }
 
-    mapContents[h1->getPositionY() * mapWidth + h1->getPositionX()] = 2;
-
     srand(time(NULL));
     int food = 15;
     while (food) {
         int rx = rand() % mapWidth;
         int ry = rand() % mapHeight;
 
+        // TODO: don't place food here but instead create an array with food positions,
+        // then draw them according to positions in drawMap()
         if (mapContents[ry * mapWidth + rx] == 0 && mapContents[ry * mapWidth + rx] != 2) {
             mapContents[ry * mapWidth + rx] = 1;
             food--;
         }
     }
-
-    drawMap(mapWidth, mapHeight, mapContents);
-
-    delete[] mapContents;
-
     
     // timer system below
-    /*
-    int count = 1;
+    // int count = 1;
+    int oldX = 0;
+    int oldY = 0;
 
     double time_counter = 0;
 
@@ -66,13 +63,25 @@ int main() {
             time_counter -= (double) (NUM_SECONDS * CLOCKS_PER_SEC);
 
             // TODO: do human actions and stuff here?
-            printf("%d\n", count);
-            count++;
+            printf("\x1b[%dA", mapHeight); // base is: "\x1b[A", goes up x number of lines, src: https://stackoverflow.com/a/42807909/4085881
+            oldX = h1->getPositionX();
+            oldY = h1->getPositionY();
+            mapContents[h1->getPositionY() * mapWidth + h1->getPositionX()] = 2;
+
+            drawMap(mapWidth, mapHeight, mapContents);
+            mapContents[oldY * mapWidth + oldX] = 0; // reset old position to nothing, though likely needs to have food and stuff intact
+            h1->moveAround();
+
+            // printf("%d\n", count);
+            // count++;
         }
 
         // printf("DebugTime = %f\n", time_counter);
     }
-    */
+
+
+    delete[] mapContents;
+
     return 0;
 }
 
