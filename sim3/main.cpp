@@ -29,8 +29,14 @@ int main() {
 
     srand(time(NULL));
     int food = 15;
+    int tempFoodVal = 0;
     while (food) {
-        tilesFood.push_back(rand() % (mapWidth * mapHeight));
+        // making sure to not have duplicate values
+        tempFoodVal = rand() % (mapWidth * mapHeight);
+        while (std::count(tilesFood.begin(), tilesFood.end(), tempFoodVal)) {
+            tempFoodVal = rand() % (mapWidth * mapHeight);
+        }
+        tilesFood.push_back(tempFoodVal);
         food--;
     }
     
