@@ -79,6 +79,7 @@ int main() {
 
 
     delete[] mapContents;
+    std::vector<Human*>().swap(humans);
 
     return 0;
 }
