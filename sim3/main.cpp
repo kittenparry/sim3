@@ -13,7 +13,11 @@ const int NUM_SECONDS = 1;
 void drawMap(int, int, int*, std::vector<int>);
 
 int main() {
-    Human* h1 = new Human("Adam", 23);
+    int population = 7;
+    std::vector<Human*> humans;
+    for (int i = 0; i < population; i++) {
+        humans.push_back(new Human("Adam"));
+    }
 
     // map stuff below
     int mapWidth = map.width;
@@ -41,9 +45,6 @@ int main() {
     }
     
     // timer system below
-    int oldX = 0;
-    int oldY = 0;
-
     double time_counter = 0;
 
     clock_t this_time = clock();
@@ -61,13 +62,18 @@ int main() {
 
             // TODO: do human actions and stuff here?
             printf("\x1b[%dA", mapHeight); // base is: "\x1b[A", goes up x number of lines, src: https://stackoverflow.com/a/42807909/4085881
-            oldX = h1->getPositionX();
-            oldY = h1->getPositionY();
-            mapContents[h1->getPositionY() * mapWidth + h1->getPositionX()] = 2;
+
+            for (int i = 0; i < humans.size(); i++) {
+                humans[i]->setPrevPosition();
+                mapContents[humans[i]->getPositionY() * mapWidth + humans[i]->getPositionX()] = 2;
+            }
 
             drawMap(mapWidth, mapHeight, mapContents, tilesFood);
-            mapContents[oldY * mapWidth + oldX] = 0; // reset old position to nothing, though likely needs to have food and stuff intact
-            h1->moveAround();
+
+            for (int i = 0; i < humans.size(); i++) {
+                mapContents[humans[i]->getPrevPosY() * mapWidth + humans[i]->getPrevPosX()] = 0; // reset old position to nothing
+                humans[i]->moveAround();
+            }
         }
     }
 

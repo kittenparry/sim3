@@ -8,11 +8,14 @@ Map map;
 
 class Human {
 public:
-	Human(const char* n, int a) : name(n), age(a) {
+	Human(const char* n) : name(n) {
+		age = RNG.BetweenTwoValues(20, 40);
 		hunger = RNG.BetweenTwoValues(50, 100);
 		sleep = RNG.BetweenTwoValues(50, 100);
-		positionX = 4;
-		positionY = 4;
+		positionX = RNG.BetweenTwoValues(0, map.width);
+		positionY = RNG.BetweenTwoValues(0, map.height);
+		prevPosX = positionX;
+		prevPosY = positionY;
 	}
 	~Human();
 
@@ -36,6 +39,14 @@ public:
 		} else {
 			positionY = y;
 		}
+	}
+
+	// previous tile positions to reset those back to nothing while drawing
+	int getPrevPosX() { return prevPosX; }
+	int getPrevPosY() { return prevPosY; }
+	void setPrevPosition() {
+		prevPosX = positionX;
+		prevPosY = positionY;
 	}
 
 	void moveAround() {
@@ -64,4 +75,6 @@ private:
 	int sleep;
 	int positionX;
 	int positionY;
+	int prevPosX;
+	int prevPosY;
 };
